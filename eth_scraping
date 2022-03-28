@@ -1,0 +1,33 @@
+from bs4 import BeautifulSoup
+import requests
+import csv
+from datetime import date, datetime
+from mechanize import Browser
+
+
+page_to_scrape = requests.get("https://coinmarketcap.com/currencies/ethereum/")
+soup = BeautifulSoup(page_to_scrape.text, "html.parser")
+cost = soup.findAll("div", attrs = {"class":"priceValue"})
+e = datetime.now()
+count = 0 
+
+
+file = open("eth_prices.csv", "w")
+writer = csv.writer(file)
+writer.writerow(["Ethereum Price", "Date and Time"])
+
+
+for cost in cost:
+    print(cost.text)
+    writer.writerow([cost.text, e])
+
+
+
+while count < 25:
+    print(cost.text)
+    count = count + 1
+    
+file.close()
+print ("Current date and time = %s" % e)
+
+
